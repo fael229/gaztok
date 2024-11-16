@@ -60,45 +60,45 @@ const NearbyVendors1 = () => {
   const { checkAndInitializeOfflineMap } = useOfflineMap();
   const [isOfflineMapAvailable, setIsOfflineMapAvailable] = useState(false);
 
-  useEffect(() => {
-    const checkOfflinePack = async () => {
-      try {
-        const packs = await offlineManager.getPacks();
-        const offlinePack = packs.find(
-          (pack) => pack.name === "BENIN_OFFLINE_MAP"
-        );
+  // useEffect(() => {
+  //   const checkOfflinePack = async () => {
+  //     try {
+  //       const packs = await offlineManager.getPacks();
+  //       const offlinePack = packs.find(
+  //         (pack) => pack.name === "BENIN_OFFLINE_MAP"
+  //       );
 
-        if (offlinePack) {
-          const status = await offlinePack.status();
-          if (status.percentage === 100) {
-            setIsOfflineMapAvailable(true);
-            console.log("Pack hors ligne trouvé et prêt à être utilisé.");
-          } else {
-            Alert.alert(
-              "Carte hors ligne incomplète",
-              "Le téléchargement de la carte n'est pas terminé. Veuillez vérifier votre connexion et réessayer."
-            );
-          }
-        } else {
-          Alert.alert(
-            "Carte hors ligne manquante",
-            "Aucune carte hors ligne n'a été trouvée. Assurez-vous de la télécharger avant d'utiliser cette fonctionnalité."
-          );
-        }
-      } catch (error) {
-        console.error(
-          "Erreur lors de la vérification du pack hors ligne:",
-          error
-        );
-      }
-    };
+  //       if (offlinePack) {
+  //         const status = await offlinePack.status();
+  //         if (status.percentage === 100) {
+  //           setIsOfflineMapAvailable(true);
+  //           console.log("Pack hors ligne trouvé et prêt à être utilisé.");
+  //         } else {
+  //           Alert.alert(
+  //             "Carte hors ligne incomplète",
+  //             "Le téléchargement de la carte n'est pas terminé. Veuillez vérifier votre connexion et réessayer."
+  //           );
+  //         }
+  //       } else {
+  //         Alert.alert(
+  //           "Carte hors ligne manquante",
+  //           "Aucune carte hors ligne n'a été trouvée. Assurez-vous de la télécharger avant d'utiliser cette fonctionnalité."
+  //         );
+  //       }
+  //     } catch (error) {
+  //       console.error(
+  //         "Erreur lors de la vérification du pack hors ligne:",
+  //         error
+  //       );
+  //     }
+  //   };
 
-    checkOfflinePack();
-  }, []);
+  //   checkOfflinePack();
+  // }, []);
 
-  useEffect(() => {
-    checkAndInitializeOfflineMap().then(() => setIsMapReady(true));
-  }, []);
+  // useEffect(() => {
+  //   checkAndInitializeOfflineMap().then(() => setIsMapReady(true));
+  // }, []);
 
   useEffect(() => {
     if (cameraRef.current && userLocation) {
@@ -637,12 +637,13 @@ const NearbyVendors1 = () => {
         </ScrollView>
       </View>
 
-      {userLocation && isMapReady && isOfflineMapAvailable ? (
+      {userLocation ? (
+        // && isMapReady && isOfflineMapAvailable
         <Mapbox.MapView
           style={styles.map}
           styleURL="mapbox://styles/mapbox/streets-v11"
           logoEnabled={false}
-          offlineEnabled={true}
+          // offlineEnabled={true}
           localizeLabels={true}
           onDidFinishLoadingMap={() => console.log("Map chargée")}
         >

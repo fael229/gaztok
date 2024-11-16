@@ -27,7 +27,7 @@ export default function Onboard1() {
   const navigation = useNavigation();
   const [progress, setProgress] = useState(0);
   const [isMapDownloaded, setIsMapDownloaded] = useState(false);
-
+  
   const { checkAndInitializeOfflineMap } = useOfflineMap(
     setProgress,
     setIsMapDownloaded
@@ -52,6 +52,11 @@ export default function Onboard1() {
                 buttonPositive: "OK",
               }
             );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+              await checkAndInitializeOfflineMap();
+            }
+          } else {
+            await checkAndInitializeOfflineMap();
           }
           await AsyncStorage.setItem("isFirstLaunch", "false");
         }
@@ -98,9 +103,22 @@ export default function Onboard1() {
         </View>
       </ScrollView>
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.button} onPress={handleNextPress}>
-          <Text style={styles.buttonText}>Suivant</Text>
-        </TouchableOpacity>
+        {isMapDownloaded ? (
+          <TouchableOpacity style={styles.button} onPress={handleNextPress}>
+            <Text style={styles.buttonText}>Suivant</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={styles.progressContainer}>
+            <Text style={styles.progressText}>
+              Téléchargement de la carte : {progress}%
+            </Text>
+            {/* <ProgressBar
+              progress={progress / 100}
+              width={width * 0.8}
+              color={colors.white}
+            /> */}
+          </View>
+        )}
       </View>
     </SafeAreaView>
   );
